@@ -31,20 +31,24 @@ scene.add(new THREE.PointLightHelper(lightBulb));
 
 let r_mutiplier = 1;
 function animate() {
-  object.rotation.x += 0.01 * r_mutiplier;
-  object.rotation.y += 0.03 * r_mutiplier;
-  object.rotation.z += 0.01 * r_mutiplier;
+  donut.rotation.x += 0.01 * r_mutiplier;
+  donut.rotation.y += 0.03 * r_mutiplier;
+  donut.rotation.z += 0.01 * r_mutiplier;
+
+  moonOrbit.rotation.x += 0.001 * r_mutiplier;
+  moonOrbit.rotation.z += 0.02 * r_mutiplier;
+
 
   camControl.update();
 
   renderer.render(scene, camera);
-  
+
   requestAnimationFrame(animate);
 }
 
 
 // 2. add object
-const geometry = new THREE.TorusGeometry(10, 3, 16, 100);
+const geometry = new THREE.TorusGeometry(10, 3, 16, 200);
 let material;
 
 // 2d and wireframe
@@ -53,17 +57,36 @@ let material;
 //   wireframe: true,
 // });
 
-// real alike skin
-material = new THREE.MeshStandardMaterial({
-  color: 0xff6347,
-  wireframe: false,
+// real alike texture
+// material = new THREE.MeshStandardMaterial({
+//   color: 0xff6347,
+//   wireframe: false,
+// });
+
+// img texture
+const texture = new THREE.TextureLoader().load('img/worldmap.png');
+// texture.offset = new THREE.Vector2(0, 0.4);
+material = new THREE.MeshBasicMaterial({
+  map: texture,
+  // normalMap: texture,
 });
 
 
-const object = new THREE.Mesh(geometry, material);
-scene.add(object);
+const donut = new THREE.Mesh(geometry, material);
+scene.add(donut);
 
+const moon = new THREE.Mesh(
+  new THREE.SphereGeometry(2),
+  new THREE.MeshStandardMaterial({ color: 0xffffff }),
+);
+moon.position.set(0, 24, 0);
+const moonOrbit = new THREE.Mesh(
+  new THREE.SphereGeometry(100),
+  new THREE.MeshBasicMaterial(),
+);
+moonOrbit.add(moon);
 
+scene.add(moonOrbit);
 
 // 3. render all and draw to screen
 animate();
