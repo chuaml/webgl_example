@@ -22,12 +22,31 @@ const camControl = new OrbitControls(camera, renderer.domElement);
 const globalLight = new THREE.AmbientLight(0xffffff, 1);
 scene.add(globalLight);
 
-const lightBulb = new THREE.PointLight(0xffffff, 1001, 0, 2);
+const lightBulb = new THREE.PointLight(0xffffff, 1, 0, 2);
 lightBulb.position.set(5, 15, 5);
 scene.add(lightBulb);
-
 // debug light
 scene.add(new THREE.PointLightHelper(lightBulb));
+
+const sun = new THREE.Mesh(
+  new THREE.SphereGeometry(11),
+  new THREE.MeshBasicMaterial({ color: 0xffaf4d })
+);
+sun.position.set(0, 10, 50);
+
+const sunOrbit = new THREE.Mesh(
+  new THREE.SphereGeometry(200),
+  new THREE.MeshBasicMaterial(),
+);
+const sunLight = new THREE.PointLight(0xffffff, 400, 0, 1);
+sun.add(sunLight);
+scene.add(new THREE.PointLightHelper(sunLight));
+
+sunOrbit.add(sun);
+scene.add(sunOrbit);
+
+
+
 
 let r_mutiplier = 1;
 function animate() {
@@ -38,6 +57,7 @@ function animate() {
   moonOrbit.rotation.x += 0.001 * r_mutiplier;
   moonOrbit.rotation.z += 0.02 * r_mutiplier;
 
+  sunOrbit.rotation.y += 0.02 * r_mutiplier;
 
   camControl.update();
 
