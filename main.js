@@ -50,8 +50,8 @@ scene.add(sunOrbit);
 
 let r_mutiplier = 1;
 function animate() {
-  donut.rotation.x += 0.01 * r_mutiplier;
-  donut.rotation.y += 0.03 * r_mutiplier;
+  donut.rotation.x += 0.02 * r_mutiplier;
+  donut.rotation.y += 0.01 * r_mutiplier;
   donut.rotation.z += 0.01 * r_mutiplier;
 
   moonOrbit.rotation.x += 0.001 * r_mutiplier;
@@ -86,13 +86,16 @@ let material;
 // img texture
 const texture = new THREE.TextureLoader().load('img/worldmap.png');
 // texture.offset = new THREE.Vector2(0, 0.4);
-material = new THREE.MeshBasicMaterial({
+material = new THREE.MeshStandardMaterial({
   map: texture,
   // normalMap: texture,
+  // metalness: 0.6,
+  roughness: .8,
 });
 
 
 const donut = new THREE.Mesh(geometry, material);
+donut.rotation.x = 3.14 / 2;
 scene.add(donut);
 
 const moon = new THREE.Mesh(
