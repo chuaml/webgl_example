@@ -49,7 +49,8 @@ scene.add(sunOrbit);
 
 
 let r_mutiplier = 1;
-function animate() {
+const WORLD_TIME_SPEED = 1000 / 60;
+function updateSceneState() {
   donut.rotation.x += 0.02 * r_mutiplier;
   donut.rotation.y += 0.01 * r_mutiplier;
   donut.rotation.z += 0.01 * r_mutiplier;
@@ -58,11 +59,11 @@ function animate() {
   moonOrbit.rotation.z += 0.02 * r_mutiplier;
 
   sunOrbit.rotation.y += 0.02 * r_mutiplier;
-
+  setTimeout(updateSceneState, WORLD_TIME_SPEED);
+}
+function animate() {
   camControl.update();
-
   renderer.render(scene, camera);
-
   requestAnimationFrame(animate);
 }
 
@@ -120,6 +121,7 @@ scene.add(moonOrbit);
 
 // 3. render all and draw to screen
 animate();
+updateSceneState();
 
 
 
