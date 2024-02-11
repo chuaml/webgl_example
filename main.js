@@ -66,6 +66,13 @@ function animate() {
   requestAnimationFrame(animate);
 }
 
+window.addEventListener('resize', function (ev) {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
 
 // 2. add object
 const geometry = new THREE.TorusGeometry(10, 3, 16, 200);
