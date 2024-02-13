@@ -2,7 +2,7 @@ import './style.css'
 import * as THREE from 'three';
 
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-
+import { PointerLockControls } from './PointerLockControls_v2.js';
 
 // 1. setup
 const scene = new THREE.Scene();
@@ -16,8 +16,117 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 
 const camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.setZ(30);
+camera.position.setY(10);
 scene.add(new THREE.GridHelper(200, 50));
-const camControl = new OrbitControls(camera, renderer.domElement);
+// const camControl = new OrbitControls(camera, renderer.domElement);
+
+const camControl = new PointerLockControls(camera, document.getElementById('bg'));
+camControl.pointerSpeed = 1;
+console.log(camControl);
+camControl._onMouseMove = null;
+let tt = 0;
+let ifdd = 0;
+camControl.addEventListener('changeX', function (e) {
+  clearTimeout(tt);
+  if (++ifdd > 100) {
+    ifdd = 0;
+    console.log(camera.rotation);
+    return;
+  }
+  tt = setTimeout(_ => {
+    console.log(camera.rotation);
+
+  }, 100);
+});
+let moveForward = false;
+let moveBackward = false;
+let moveLeft = false;
+let moveRight = false;
+let doJump = false;
+const updateMovement = function (keyCode, toIsMoving) {
+  switch (keyCode) {
+    case 'KeyW':
+    case 'ArrowUp':
+      moveForward = toIsMoving;
+      break;
+    case 'KeyS':
+    case 'ArrowDown':
+      moveBackward = toIsMoving;
+      break;
+    case 'KeyA':
+    case 'ArrowLeft':
+      moveLeft = toIsMoving;
+      break;
+    case 'KeyD':
+    case 'ArrowRight':
+      moveRight = toIsMoving;
+      break;
+    case 'Space':
+      doJump = toIsMoving;
+      break;
+  }
+};
+document.addEventListener('keydown', function (e) {
+  updateMovement(e.code, true);
+});
+document.addEventListener('keyup', function (e) {
+  updateMovement(e.code, false);
+});
+
+document.addEventListener('click', function (e) {
+  camControl.lock();
+});
+document.addEventListener('keydown', function (e) {
+ if(e.code === 'Backquote') camControl.unlock();
+});
+
+const mass = 10;
+const movementScale = 200;
+const jumpPower = 40;
+const friction = 8;
+const camHeight = 1.8;
+const velocity = new THREE.Vector3();
+const direction = new THREE.Vector3();
+let canJump = false;
+
+let previousTime = performance.now();
+function updateCamControl() {
+  direction.z = Number(moveForward) - Number(moveBackward);
+  direction.x = Number(moveRight) - Number(moveLeft);
+  direction.normalize(); // this ensures consistent movements in all directions
+
+  const currentTime = performance.now();
+  const delta = (currentTime - previousTime) / 1000;
+  velocity.x -= velocity.x * friction * delta;
+  velocity.z -= velocity.z * friction * delta;
+  if (moveForward || moveBackward) velocity.z -= direction.z * movementScale * delta;
+  if (moveLeft || moveRight) velocity.x -= direction.x * movementScale * delta;
+
+  camControl.moveForward(- velocity.z * delta);
+  camControl.moveRight(- velocity.x * delta);
+  // console.log(velocity);
+
+  const camControlObject = camControl.getObject();
+  if (doJump && canJump) {
+    velocity.y += jumpPower;
+    camControlObject.position.y += (velocity.y * delta);
+    doJump = false;
+  }
+
+  // gravity
+  velocity.y -= 9.8 * mass * delta; // 100.0 = mas.reduce(function (cfx, x) { return cfx + x; })
+  if (camControlObject.position.y > camHeight) {
+    camControlObject.position.y += (velocity.y * delta);
+    canJump = false;
+  }
+  else {
+    velocity.y = 0;
+    canJump = true;
+  }
+
+  previousTime = currentTime;
+}
+
 
 const globalLight = new THREE.AmbientLight(0xffffff, 1);
 scene.add(globalLight);
@@ -62,7 +171,8 @@ function updateSceneState() {
   setTimeout(updateSceneState, WORLD_TIME_SPEED);
 }
 function animate() {
-  camControl.update();
+  // camControl.update();
+  updateCamControl();
   renderer.render(scene, camera);
   requestAnimationFrame(animate);
 }
@@ -144,20 +254,20 @@ Array(200).fill().forEach(function (x) {
 
 
 // movement
-document.addEventListener('keydown', function (e) {
-  if (e.key === 'w') {
-    camera.position.z -= 1;
-  }
-  else if (e.key === 's') {
-    camera.position.z += 1;
-  }
-  else if (e.key === 'a') {
-    camera.position.x -= 1;
-  }
-  else if (e.key === 'd') {
-    camera.position.x += 1;
-  }
-});
+// document.addEventListener('keydown', function (e) {
+//   if (e.key === 'w') {
+//     camera.position.z -= 1;
+//   }
+//   else if (e.key === 's') {
+//     camera.position.z += 1;
+//   }
+//   else if (e.key === 'a') {
+//     camera.position.x -= 1;
+//   }
+//   else if (e.key === 'd') {
+//     camera.position.x += 1;
+//   }
+// });
 
 document.addEventListener('mousedown', function (e) {
   r_mutiplier += 2;
@@ -166,3 +276,10 @@ document.addEventListener('mousedown', function (e) {
 document.addEventListener('mouseup', function (e) {
   r_mutiplier = 1;
 });
+
+
+
+
+
+
+
