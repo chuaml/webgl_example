@@ -11,10 +11,12 @@ const scene = new THREE.Scene();
 const renderer = new THREE.WebGLRenderer({
   canvas: document.getElementById('bg')
 });
+const windowWidth = Math.max(document.documentElement.clientWidth, window.innerWidth);
+const windowHeight = Math.max(document.documentElement.clientHeight,window.innerHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
-renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setSize(windowWidth, windowHeight);
 
-const camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(90, windowWidth / windowHeight, 0.1, 1000);
 camera.position.setZ(30);
 camera.position.setY(10);
 scene.add(new THREE.GridHelper(200, 50));
@@ -26,18 +28,18 @@ console.log(camControl);
 camControl._onMouseMove = null;
 let tt = 0;
 let ifdd = 0;
-camControl.addEventListener('changeX', function (e) {
-  clearTimeout(tt);
-  if (++ifdd > 100) {
-    ifdd = 0;
-    console.log(camera.rotation);
-    return;
-  }
-  tt = setTimeout(_ => {
-    console.log(camera.rotation);
+// camControl.addEventListener('change', function (e) {
+//   clearTimeout(tt);
+//   if (++ifdd > 100) {
+//     ifdd = 0;
+//     console.log(camera.rotation);
+//     return;
+//   }
+//   tt = setTimeout(_ => {
+//     console.log(camera.rotation);
 
-  }, 100);
-});
+//   }, 100);
+// });
 let moveForward = false;
 let moveBackward = false;
 let moveLeft = false;
@@ -178,10 +180,10 @@ function animate() {
 }
 
 window.addEventListener('resize', function (ev) {
-  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.aspect = windowWidth / windowHeight;
   camera.updateProjectionMatrix();
   renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize(windowWidth, windowHeight);
 });
 
 
