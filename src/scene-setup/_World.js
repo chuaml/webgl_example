@@ -34,11 +34,11 @@ export class World {
     this.updateSceneState();
     this.animate();
 
-    window.addEventListener('resize', function (ev) {
-      this.camera.aspect = windowWidth / windowHeight;
+    window.addEventListener('resize', _=> {
+      this.camera.aspect = window.innerWidth / window.innerHeight;
       this.camera.updateProjectionMatrix();
       renderer.setPixelRatio(window.devicePixelRatio);
-      renderer.setSize(windowWidth, windowHeight);
+      renderer.setSize(window.innerWidth, window.innerHeight);
     });
 
   }
