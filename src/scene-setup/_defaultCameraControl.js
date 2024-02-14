@@ -7,7 +7,7 @@ export function control_as_FPS(
     canvas,
 ) {
     const camControl = new PointerLockControls(camera, canvas);
-    camControl.pointerSpeed = 1;
+    camControl.pointerSpeed = 1.25;
     console.log(camControl);
     camControl._onMouseMove = null;
     // let tt = 0;
