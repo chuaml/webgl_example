@@ -7,23 +7,13 @@ export function control_as_FPS(
     canvas,
 ) {
     const camControl = new PointerLockControls(camera, canvas);
-    camControl.pointerSpeed = 1.25;
-    console.log(camControl);
+    camControl.pointerSpeed = 1;
     camControl._onMouseMove = null;
-    // let tt = 0;
-    // let ifdd = 0;
-    // camControl.addEventListener('change', function (e) {
-    //   clearTimeout(tt);
-    //   if (++ifdd > 100) {
-    //     ifdd = 0;
-    //     console.log(camera.rotation);
-    //     return;
-    //   }
-    //   tt = setTimeout(_ => {
-    //     console.log(camera.rotation);
 
-    //   }, 100);
+    // camControl.addEventListener('change', _ => {
+    //     _log(camera);
     // });
+
     let moveForward = false;
     let moveBackward = false;
     let moveLeft = false;
@@ -112,6 +102,23 @@ export function control_as_FPS(
         previousTime = currentTime;
     };
 }
+
+let _log_timeoutId = 0;
+let _log_BufferCount = 0;
+function _log(camera) {
+    clearTimeout(_log_timeoutId);
+    if (++_log_BufferCount > 99) {
+        _log_BufferCount = 0;
+        console.log(camera.rotation);
+    }
+    else {
+        _log_timeoutId = setTimeout(_ => {
+            console.log(camera.rotation);
+        }, 100);
+    }
+}
+
+
 
 export function control_as_Orbit(
     camera,
