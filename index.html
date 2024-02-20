@@ -9,14 +9,26 @@
 
     <style>
       body {
+        background-color: #333;
         overflow: hidden;
         /* height: 100vh; */
         /* width: 100vw; */
+      }
+      #loading-overlay {
+        color: #ddd;
+        align-items: center;
+        justify-content: center;
+        display: flex;
+        width: 100vw;
+        height: 100vh;
+        position: absolute;
+        z-index: -1;
       }
     </style>
   </head>
   <body>
     <div id="app">
+      <div id="loading-overlay"><div>loading...</div></div>
       <canvas id="bg"></canvas>
     </div>
     <script type="module" src="/main.js"></script>
