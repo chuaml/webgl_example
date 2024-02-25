@@ -34,7 +34,7 @@ export class World {
     this.updateSceneState();
     this.animate();
 
-    window.addEventListener('resize', _=> {
+    window.addEventListener('resize', _ => {
       this.camera.aspect = window.innerWidth / window.innerHeight;
       this.camera.updateProjectionMatrix();
       renderer.setPixelRatio(window.devicePixelRatio);
@@ -45,14 +45,6 @@ export class World {
 
   WORLD_TIME_SPEED = 1000 / 60;
   updateSceneState() {
-    //   donut.rotation.x += 0.02 * r_mutiplier;
-    //   donut.rotation.y += 0.01 * r_mutiplier;
-    //   donut.rotation.z += 0.01 * r_mutiplier;
-
-    //   moonOrbit.rotation.x += 0.001 * r_mutiplier;
-    //   moonOrbit.rotation.z += 0.02 * r_mutiplier;
-    // sunOrbit.rotation.y += 0.02 * r_mutiplier;
-
     setTimeout(_ => this.updateSceneState(), this.WORLD_TIME_SPEED);
 
     const tasks = this._stateToUpdate;
@@ -70,7 +62,7 @@ export class World {
   _logError_task_BufferCount = 0;
   _logError(err) {
     clearTimeout(this._logError_task_timeoutId);
-    if (++this._logError_task_BufferCount > 120) {
+    if (++this._logError_task_BufferCount > 119) {
       console.error(err);
       this._logError_task_BufferCount = 0;
     }
@@ -84,12 +76,11 @@ export class World {
 
   _stateToUpdate = [];
   addSceneState(func) {
-    console.log(this);
     this._stateToUpdate.push(func);
   }
 
   removeSceneState(func) {
-    this._stateToUpdate.remove(this._stateToUpdate.indexOf(func));
+    this._stateToUpdate = this._stateToUpdate.filter(task => task !== func);
   }
 
   _addLight() {
