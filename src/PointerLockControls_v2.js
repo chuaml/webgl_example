@@ -100,7 +100,9 @@ class PointerLockControls extends EventDispatcher {
 
     lock() {
 
-        this.domElement.requestPointerLock();
+        this.domElement.requestPointerLock({
+            unadjustedMovement: true,  // fix random mouse jumping/skipping movement by using raw input no OS mouse acceleration
+        });
 
     }
 
