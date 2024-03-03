@@ -113,6 +113,7 @@ class PointerLockControls extends EventDispatcher {
 }
 
 // event listeners
+
 function onMouseMove(event) {
 
     if (this.isLocked === false) return;
@@ -123,10 +124,9 @@ function onMouseMove(event) {
     const camera = this.camera;
     _euler.setFromQuaternion(camera.quaternion);
 
-    const eY = movementX * this.pointerSpeed; // * defer multiply 0.002 to fix random mouse jump skipping
-    _euler.y -= eY * 0.002;
-    
+    _euler.y -= movementX * 0.002 * this.pointerSpeed;
     _euler.x -= movementY * 0.002 * this.pointerSpeed;
+
     _euler.x = Math.max(_PI_2 - this.maxPolarAngle, Math.min(_PI_2 - this.minPolarAngle, _euler.x));
 
     camera.quaternion.setFromEuler(_euler);
