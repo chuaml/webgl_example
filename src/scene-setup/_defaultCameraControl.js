@@ -10,9 +10,29 @@ export function control_as_FPS(
     camControl.pointerSpeed = .5;
     camControl._onMouseMove = null;
 
-    // camControl.addEventListener('change', _ => {
-    //     _log(camera);
-    // });
+    // setup menu settings
+    const settingsModal = document.getElementById('settingsModal');
+    settingsModal.addEventListener('keyup', function (e) {
+        if (e.code === 'Escape')
+            this.close();
+    });
+    settingsModal.showModal();
+
+    camControl.addEventListener('lock', function (e) {
+        settingsModal.close();
+    });
+    camControl.addEventListener('unlock', function (e) {
+        settingsModal.showModal();
+    });
+
+    document.getElementById('setting-mouse-sensitivity').addEventListener('input', function (e) {
+        camControl.pointerSpeed = e.target.value;
+        e.target.closest('.setting').querySelector('.value').innerText = e.target.value;
+    });
+    document.getElementById('btnClose').addEventListener('click', function (e) {
+        settingsModal.close();
+    });
+
 
     let moveForward = false;
     let moveBackward = false;
@@ -43,13 +63,15 @@ export function control_as_FPS(
         }
     };
     document.addEventListener('keydown', function (e) {
+        if (camControl.isLocked === false) return;
         updateMovement(e.code, true);
     });
     document.addEventListener('keyup', function (e) {
+        if (camControl.isLocked === false) return;
         updateMovement(e.code, false);
     });
 
-    document.addEventListener('click', function (e) {
+    canvas.addEventListener('click', function (e) {
         camControl.lock();
     });
     document.addEventListener('keydown', function (e) {
@@ -103,20 +125,6 @@ export function control_as_FPS(
     };
 }
 
-let _log_timeoutId = 0;
-let _log_BufferCount = 0;
-function _log(camera) {
-    clearTimeout(_log_timeoutId);
-    if (++_log_BufferCount > 99) {
-        _log_BufferCount = 0;
-        console.log(camera.rotation);
-    }
-    else {
-        _log_timeoutId = setTimeout(_ => {
-            console.log(camera.rotation);
-        }, 100);
-    }
-}
 
 
 
