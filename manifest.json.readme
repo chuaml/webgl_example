@@ -1,0 +1,2 @@
+// vite do NOT use mainfest.json file, 
+// config in vite.config.js ( plugins -> manifest ) instead
