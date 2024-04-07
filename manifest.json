@@ -1,5 +1,6 @@
 {
     "name": "WebGL example",
+    "short_name": "WebGL_example",
     "start_url": "/",
     "display": "fullscreen",
     "icons": [
@@ -27,5 +28,23 @@
             "type": "image/png",
             "purpose": "maskable"
         }
-    ]
+    ],
+    "background_color": "blue",
+    "screenshots": [
+        {
+            "src": "icons/screenshots/desktop.ss.jpg",
+            "sizes": "960x467",
+            "type": "image/jpeg",
+            "form_factor": "wide",
+            "label": "screenshot of app in desktop view"
+        },
+        {
+            "src": "icons/screenshots/mobile.ss.jpg",
+            "sizes": "361x805",
+            "type": "image/jpeg",
+            "form_factor": "narrow",
+            "label": "screenshot of app in mobile view"
+        }
+    ],
+    "description": "example of WebGL and PWA implementation."
 }
