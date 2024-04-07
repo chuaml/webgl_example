@@ -1,7 +1,7 @@
 {
     "name": "WebGL example",
     "short_name": "WebGL_example",
-    "start_url": "/",
+    "start_url": "/webgl_example",
     "display": "fullscreen",
     "icons": [
         {
