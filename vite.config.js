@@ -12,7 +12,7 @@ export default {
             manifest: {
                 "name": "WebGL example",
                 "short_name": "WebGL_example",
-                "start_url": "/",
+                "start_url": "./",
                 "display": "fullscreen",
                 "icons": [
                     {
