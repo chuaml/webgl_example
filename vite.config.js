@@ -59,6 +59,25 @@ export default {
                     }
                 ],
                 "description": "example of WebGL and PWA implementation."
+            },
+            workbox: {
+                // globPatterns: ['**/*.{js,css,html,ico,png,svg}'], // precache, eager load and cache
+                runtimeCaching: [
+                    {
+                        urlPattern: /\.(png|jpg|jpeg|svg|gif)$/i,
+                        handler: 'StaleWhileRevalidate', // Cache StrategyName
+                        options: {
+                            cacheName: 'image-cache',
+                            expiration: {
+                                maxEntries: 10,
+                                maxAgeSeconds: 3600 * 24 * 2 
+                            },
+                            cacheableResponse: {
+                                statuses: [0, 200]
+                            }
+                        }
+                    },
+                ]
             }
         })
     ],
